@@ -1,0 +1,99 @@
+{
+  "student_name": "Liam Brent",
+  "section": "tn35",
+  "ai_tool": "ChatGPT",
+  "credentials_redacted": true,
+  "requests": [
+    {
+      "id": "R1",
+      "purpose": "List all books",
+      "method": "GET",
+      "path": "/api/v1/books",
+      "authentication": "none",
+      "query_parameters": {},
+      "headers": {},
+      "payload": null,
+      "expected_status": 200,
+      "ai_decision": "accepted",
+      "validation_evidence": "VM/Postman: GET /api/v1/books returned 200 OK. Attach redacted screenshot R1."
+    },
+    {
+      "id": "R2",
+      "purpose": "List books with ISBN values and sort by author",
+      "method": "GET",
+      "path": "/api/v1/books",
+      "authentication": "none",
+      "query_parameters": {"includeISBN": "true", "sortBy": "author"},
+      "headers": {},
+      "payload": null,
+      "expected_status": 200,
+      "ai_decision": "accepted",
+      "validation_evidence": "VM/Postman: GET with includeISBN=true and sortBy=author returned 200 OK. Attach redacted screenshot R2."
+    },
+    {
+      "id": "R3",
+      "purpose": "Authenticate and obtain a temporary API token",
+      "method": "POST",
+      "path": "/api/v1/loginViaBasic",
+      "authentication": "basic-auth",
+      "query_parameters": {},
+      "headers": {},
+      "payload": null,
+      "expected_status": 200,
+      "ai_decision": "accepted",
+      "validation_evidence": "VM/Postman: Basic Auth login returned 200 OK. Temporary token must be fully hidden in screenshot R3."
+    },
+    {
+      "id": "R4",
+      "purpose": "Add one fictional book",
+      "method": "POST",
+      "path": "/api/v1/books",
+      "authentication": "x-api-key",
+      "query_parameters": {},
+      "headers": {"Content-Type": "application/json"},
+      "payload": {"id": "LAB4-001", "title": "The API Practice Library", "author": "Liam Brent"},
+      "expected_status": 200,
+      "ai_decision": "accepted",
+      "validation_evidence": "VM/Postman: protected POST with fictional JSON payload returned 200 OK. Hide API-key value in screenshot R4."
+    },
+    {
+      "id": "R5",
+      "purpose": "Retrieve the newly added book by ID",
+      "method": "GET",
+      "path": "/api/v1/books/{id}",
+      "authentication": "none",
+      "query_parameters": {},
+      "headers": {},
+      "payload": null,
+      "expected_status": 200,
+      "ai_decision": "accepted",
+      "validation_evidence": "VM/Postman: GET /api/v1/books/LAB4-001 returned 200 OK after R4. Attach screenshot R5."
+    },
+    {
+      "id": "R6",
+      "purpose": "Delete the new book by ID",
+      "method": "DELETE",
+      "path": "/api/v1/books/{id}",
+      "authentication": "x-api-key",
+      "query_parameters": {},
+      "headers": {},
+      "payload": null,
+      "expected_status": 200,
+      "ai_decision": "accepted",
+      "validation_evidence": "VM/Postman: protected DELETE for LAB4-001 returned 200 OK. Hide API-key value in screenshot R6."
+    },
+    {
+      "id": "R7",
+      "purpose": "Troubleshoot a rejected add-book request with a missing or invalid API key",
+      "method": "POST",
+      "path": "/api/v1/books",
+      "authentication": "missing-or-invalid-key",
+      "query_parameters": {},
+      "headers": {"Content-Type": "application/json"},
+      "payload": {"id": "LAB4-002", "title": "The Repaired API Request", "author": "Liam Brent"},
+      "expected_status": 401,
+      "ai_decision": "accepted",
+      "validation_evidence": "VM/Postman: POST without a valid X-API-KEY returned 401; after restoring the valid key it returned 200 OK. Attach screenshots R7 failure and repair."
+    }
+  ]
+}
